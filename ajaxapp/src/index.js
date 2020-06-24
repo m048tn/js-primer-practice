@@ -1,6 +1,8 @@
-console.log("index.js: loaded");
-function fetchUserInfo() {
-  const userId = "m048tn";
+function main() {
+  fetchUserInfo("m048tn");
+}
+
+function fetchUserInfo(userId) {
   fetch(`https://api.github.com/users/${encodeURIComponent(userId)}`)
     .then((response) => {
       console.log(response.status);
@@ -8,19 +10,12 @@ function fetchUserInfo() {
         console.error("エラーレスポンス", response);
       } else {
         return response.json().then((userInfo) => {
-          const view = escapeHTML`
-          <h4>${userInfo.avater_url} (@${userInfo.login})</h4>
-          <img src="${userInfo.avatar_url}" alt="${userInfo.login}" height="100">
-          <dl>
-            <dt>location</dt>
-            <dd>${userInfo.location}</dd>
-            <dt>Repositories</dt>
-            <dd>${userInfo.public_repos}</dd>
-          </dl>
-          `;
+          // HTMLの組み立て
+          const view = createView(userInfo);
 
-          const result = document.getElementById("result");
-          result.innerHTML = view;
+          // HTMLの挿入
+          displayView(view);
+
           // パースされたオブジェクトが渡される
           console.log(userInfo);
         });
@@ -29,6 +24,24 @@ function fetchUserInfo() {
     .catch((error) => {
       console.error(error);
     });
+}
+
+function createView(userInfo) {
+  return escapeHTML`
+  <h4>${userInfo.avater_url} (@${userInfo.login})</h4>
+  <img src="${userInfo.avatar_url}" alt="${userInfo.login}" height="100">
+  <dl>
+    <dt>location</dt>
+    <dd>${userInfo.location}</dd>
+    <dt>Repositories</dt>
+    <dd>${userInfo.public_repos}</dd>
+  </dl>
+  `;
+}
+
+function displayView(view) {
+  const result = document.getElementById("result");
+  result.innerHTML = view;
 }
 
 /**
