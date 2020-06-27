@@ -1,5 +1,6 @@
 const commander = require("commander");
 const fs = require("fs");
+const md2html = require("./md2html");
 
 commander.option("--gfm", "GFMを有効にする");
 commander.parse(process.argv);
@@ -21,5 +22,6 @@ fs.readFile(filePath, { encoding: "utf-8" }, (err, file) => {
     process.exit(1);
     return;
   }
-  const html = console.log(html);
+  const html = md2html(file, cliOptions);
+  console.log(html);
 });

@@ -1,7 +1,7 @@
 const marked = require("marked");
 
-module.exports = (file, cliOptions) => {
-  return marked(file, {
+module.exports = (markdown, cliOptions) => {
+  return marked(markdown, {
     gfm: cliOptions.gfm,
   });
 };
